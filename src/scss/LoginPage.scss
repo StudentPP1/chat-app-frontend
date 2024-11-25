@@ -1,7 +1,7 @@
-$primary: #9e7d64;
-$secondary: #101612;
+$primary: #f2b263;
+$secondary: #bf5630;
 $white: #fff;
-$gray: #9b9b9b;
+$gray: #8d6565;
 
 body {
     font-family: "Poppins", sans-serif;
@@ -11,7 +11,7 @@ body {
     align-items: center;
     min-height: 100vh;
     font-size: 1.5rem;
-    background-color: #222222;
+    background-color: rgb(31, 34, 35);
 }
 
 .form__group {
@@ -75,4 +75,73 @@ body {
     &:invalid {
         box-shadow: none;
     }
+}
+
+.login-page__form-submit-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.form-submit-button {
+    font-size: 16px;
+    position: relative;
+    margin: 10px;
+    padding: 10px 2.5em 10px 2.5em;
+    border: none;
+    background-color: #8d6565;
+    color: rgb(31, 34, 35);
+    transition: all 0.1s linear;
+    border-radius: 30px;
+    box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.1);
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    & span {
+        color: #464646;
+    }
+
+    & .border {
+        position: absolute;
+        border: 0.15em solid #fff;
+        transition: all 0.3s 0.08s linear;
+        top: 50%;
+        left: 50%;
+        width: 9em;
+        height: 3em;
+        transform: translate(-50%, -50%);
+    }
+
+    &:hover .border {
+        display: block;
+        width: 9.9em;
+        height: 3.7em;
+    }
+}
+
+.full-rounded {
+    border-radius: 2em;
+}
+
+.login-page__form-change-button {
+    font-size: 16px;
+    padding: 10px;
+    color: whitesmoke;
+}
+
+.change-button {
+    font-size: 16px;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.show-password-button {
+    cursor: pointer;
+    font-size: 16px;
+    color: whitesmoke;
+    display: inline-block;
+    padding: 10px 5px;
 }
