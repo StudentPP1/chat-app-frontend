@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext  } from 'react';
 import "../scss/ChatPage.css"
 import SockJS from "sockjs-client"
-import { CompatClient, Stomp } from '@stomp/stompjs';
+import {Message} from "../model/Message"
+import { Stomp } from '@stomp/stompjs';
 import { UserContext, UserState } from '../utils/context';
 
 function ChatPage() {

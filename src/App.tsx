@@ -1,8 +1,9 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import LoginPage from "./components/LoginPage";
 import ChatPage from "./components/ChatPage";
 import { UserContext } from "./utils/context";
 import { useEffect, useState } from "react";
+import { ChatUser } from "./model/ChatUser";
 
 function App() {
   const [user, setUser] = useState<ChatUser | null>(null);
@@ -28,7 +29,13 @@ function App() {
   }
 
   useEffect(() => {
-    getSession()
+    try {
+      getSession()
+    }
+    catch (error) {
+      console.log(error)
+      setUser(null)
+    }
   }, [])
 
   return (

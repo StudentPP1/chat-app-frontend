@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import "../scss/LoginPage.css"
 import { UserContext, UserState } from '../utils/context';
+import { Button } from "@/components/ui/button"
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -116,35 +117,40 @@ function LoginPage() {
           </div>
 
           <div className="form__group field">
-            <input 
-            type="text" 
-            className="form__field" 
-            placeholder="username" name="username" id='username' required />
+            <input
+              type="text"
+              className="form__field"
+              placeholder="username" name="username" id='username' required />
             <label className="form__label">username</label>
           </div>
 
           <div className="form__group field">
-            <input 
-            type={showPassword ? "text" : "password" }
-            className="form__field" 
-            placeholder="password" name="password" id='password' required />
+            <input
+              type={showPassword ? "text" : "password"}
+              className="form__field"
+              id="userPassword"
+              autoComplete="new-password"
+              placeholder="password" name="password" required />
             <label className="form__label">password</label>
-            <div className='show-password-button' onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? "hide" : "show" }
-            </div>
+          </div>
+
+          <div className='show-password-button' onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? "hide" : "show"}
           </div>
 
           <div className='login-page__form-submit-button'>
-            <button type="submit" className='form-submit-button'>
+            <Button type="submit" >
               {isLogin ? "Login" : "Register"}
-            </button>
+            </Button>
           </div>
 
           <div className='login-page__form-change-button'>
             <span>
-            {isLogin ? "Don't have account? " : "Already have account? "}
+              {isLogin ? "Don't have account? " : "Already have account? "}
             </span>
-            <a className='change-button' type="button" onClick={() => { setIsLogin(!isLogin) }}>
+            <a className='change-button' type="button" onClick={() => {
+              setIsLogin(!isLogin)
+            }}>
               {isLogin ? "Register now" : "Login now"}
             </a>
           </div>
