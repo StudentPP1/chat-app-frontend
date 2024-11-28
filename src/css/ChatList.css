@@ -16,7 +16,7 @@ ul.tags-menu::-webkit-scrollbar-track {
 }
   
 ul.tags-menu::-webkit-scrollbar-thumb {
-    background-color: #9D331F;    
+    background-color: rgb(107 114 128);
     border-radius: 5px;     
     margin: 5px;   
 }
@@ -27,4 +27,15 @@ ul.tags-menu li {
 
 ul.tags-menu li:first-child {
     padding-top: 5px;
+}
+
+.chat {
+    margin: 0 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+}
+
+.chat:hover {
+    background-color: rgb(107 114 128);
 }

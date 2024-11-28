@@ -7,15 +7,15 @@
     overflow-y: hidden;
 }
 
-.chat::-webkit-scrollbar {
-    width: 7px;        
+.chat-area::-webkit-scrollbar {
+    width: 7px;       
 }
   
-.chat::-webkit-scrollbar-track {
-    background: transparent;          
+.chat-area::-webkit-scrollbar-track {
+    background-color: rgb(55 65 81);    
 }
   
-.chat::-webkit-scrollbar-thumb {
-    background-color: #9D331F;    
+.chat-area::-webkit-scrollbar-thumb {
+    background-color: rgb(107 114 128);
     border-radius: 5px;  
 }
