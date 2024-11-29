@@ -1,3 +1,4 @@
+import { ChatUser } from "@/model/ChatUser";
 import { createContext } from "react";
 
 export interface UserState {

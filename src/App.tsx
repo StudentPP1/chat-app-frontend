@@ -30,8 +30,7 @@ function App() {
         <UserContext.Provider value={{ user, setUser }}>
           <BrowserRouter>
             <Routes>
-            <Route path="/" element={user ? <LoginPage /> : <ChatPage />} />
-              {/* <Route path="/" element={user ? <ChatPage /> : <LoginPage />} /> */}
+              <Route path="/" element={user ? <ChatPage /> : <LoginPage />} />
               <Route path="/login" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
               <Route path="/chat" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
             </Routes>

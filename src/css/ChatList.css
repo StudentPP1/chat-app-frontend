@@ -1,4 +1,4 @@
-ul.tags-menu {
+ul.chats {
     position: relative;
     width: 100%;
     max-height: 540px;
@@ -7,25 +7,25 @@ ul.tags-menu {
     overflow-y: auto;
 }
 
-ul.tags-menu::-webkit-scrollbar {
-    width: 7px;         
-}
-  
-ul.tags-menu::-webkit-scrollbar-track {
-    background: transparent;          
-}
-  
-ul.tags-menu::-webkit-scrollbar-thumb {
-    background-color: rgb(107 114 128);
-    border-radius: 5px;     
-    margin: 5px;   
+ul.chats::-webkit-scrollbar {
+    width: 7px;
 }
 
-ul.tags-menu li {
+ul.chats::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+ul.chats::-webkit-scrollbar-thumb {
+    background-color: rgb(107 114 128);
+    border-radius: 5px;
+    margin: 5px;
+}
+
+ul.chats li {
     padding-top: 10px;
 }
 
-ul.tags-menu li:first-child {
+ul.chats li:first-child {
     padding-top: 5px;
 }
 
@@ -38,4 +38,13 @@ ul.tags-menu li:first-child {
 
 .chat:hover {
     background-color: rgb(107 114 128);
+}
+
+.close-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-size: 16px;
 }

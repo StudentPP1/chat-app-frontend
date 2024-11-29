@@ -1,17 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import "../css/ChatBox.css"
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { Chat } from "@/model/Chat";
+import { ChatUser } from "@/model/ChatUser";
+import ChatService from "@/api/ChatService";
 
 type Message = {
     sender: "user" | "bot";
     text: string;
 };
-export const ChatBox: React.FC = () => {
+// TODO: sending message & set Messages
+export const ChatBox: React.FC<{
+    activeChat: Chat,
+    messageSend: any,
+    user: ChatUser | null
+}> = ({activeChat, messageSend, user}) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
+
+    const createMessage = () => {
+        const message = inputValue;
+        const to = activeChat.users;
+        const from = user?.username
+        if (from != null && typeof message == "string" && typeof to == "string") {
+          return {
+            chatId: from + "&" + to + "&" + Date.now().toString(),
+            fromId: from,
+            toId: to,
+            content: message,
+            timestamp: new Date().toString()
+          }
+        }
+        else {
+          throw new Error();
+        }
+    }
 
     const handleSendMessage = () => {
         if (!inputValue.trim()) return;
@@ -32,6 +58,13 @@ export const ChatBox: React.FC = () => {
         // Clear input field
         setInputValue("");
     };
+
+    useEffect(() => {
+        const getMessages = async () => {
+            console.log(await ChatService.getMessages(activeChat.chatId))
+        }
+        getMessages()
+    }, [messages])
 
     return (
         <div className="flex-1 flex flex-col bg-black">
