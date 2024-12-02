@@ -1,66 +1,51 @@
+import "../css/LoginPage.css"
 import { useContext, useState } from 'react';
-import "../scss/LoginPage.css"
 import { UserContext, UserState } from '../utils/context';
+import UserService from "../api/UserService";
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
-  const {user, setUser} = useContext<UserState>(UserContext)
+  const [error, setError] = useState<string | null>(null)
+  const { setUser } = useContext<UserState>(UserContext)
 
   const login = async (event: any) => {
-    console.log("login")
     event.preventDefault()
     const username = event.target['username'].value;
     const password = event.target['password'].value;
 
-    await fetch("http://localhost:8080/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({ username: username, password: password }),
-    }).then(async () => {getSession()})
+    await UserService.login(username, password).then(async res => {
+      if (!res.ok) {
+        return res.text().then(text => {
+          setError(text)
+        })
+      }
+      else {
+        setUser(await UserService.getSession())
+      }
+    })
   }
 
   const register = async (event: any) => {
-    console.log("register")
     event.preventDefault()
     const name = event.target['name'].value;
     const username = event.target['username'].value;
     const password = event.target['password'].value;
 
-    await fetch("http://localhost:8080/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({ name: name, username: username, password: password }),
-    }).then(async () => {getSession()})
+    await UserService.register(name, username, password).then(async res => {
+      if (!res.ok) {
+        res.text().then(text => {
+          setError(text)
+        })
+      }
+      else {
+        setUser(await UserService.getSession())
+      }
+    })
   }
 
-  const getSession = async () => {
-    const result = await fetch("http://localhost:8080/auth/getSession", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include"
-    })
-    if (result.ok) {
-      const json = await result.json();
-      console.log(json);
-      setUser(json)
-    }
+  if (error) {
+    window.alert(error)
+    setError(null)
   }
 
   return (
@@ -73,7 +58,7 @@ function LoginPage() {
             <input
               type="input"
               className="form__field"
-              name="name" id='name' 
+              name="name" id='name'
               style={{ display: isLogin ? "none" : "block" }}
             />
             <label

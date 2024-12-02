@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { ChatUser } from "../model/ChatUser";
 
 export interface UserState {
     user: ChatUser | null
