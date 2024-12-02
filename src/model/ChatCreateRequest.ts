@@ -1,4 +1,5 @@
 export type ChatCreateRequest = {
-    chatId: string,
-    usernames: string[]
+    chatName: string,
+    usernames: string[],
+    type: string
 }

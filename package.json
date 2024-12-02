@@ -50,5 +50,8 @@
   },
   "main": "index.js",
   "author": "StudentPP1 <mishamakytonin@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.4.15"
+  }
 }

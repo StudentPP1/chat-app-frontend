@@ -19,25 +19,6 @@ export default class ChatService {
     return json;
   }
 
-  static async getMessages(chatId: string) {
-    const response = await fetch(
-      ChatService.API_URL + "/get/messages/" + chatId,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "*",
-          "Access-Control-Allow-Headers": "*",
-        },
-        credentials: "include",
-      }
-    );
-    const json = await response.json();
-    console.log(json);
-    return json;
-  }
-
   static async findUsers(username: string) {
     const response = await fetch(
       ChatService.API_URL + "/get/user/" + username,
@@ -78,7 +59,7 @@ export default class ChatService {
 
   static async createChat(chat: ChatCreateRequest) {
     const response = await fetch(
-      ChatService.API_URL + "/create/group",
+      ChatService.API_URL + "/create/chat",
       {
         method: "POST",
         headers: {
@@ -91,6 +72,8 @@ export default class ChatService {
         body: JSON.stringify(chat)
       }
     );
-    return response;
+    const json = await response.json();
+    console.log(json);
+    return json;
   }
 }
