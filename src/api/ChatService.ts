@@ -15,7 +15,6 @@ export default class ChatService {
       credentials: "include",
     });
     const json = await response.json();
-    console.log(json);
     return json;
   }
 
@@ -34,7 +33,6 @@ export default class ChatService {
       }
     );
     const json = await response.json();
-    console.log(json);
     return json;
   }
 
@@ -53,7 +51,6 @@ export default class ChatService {
       }
     );
     const json = await response.json();
-    console.log(json);
     return json;
   }
 
@@ -73,7 +70,6 @@ export default class ChatService {
       }
     );
     const json = await response.json();
-    console.log(json);
     return json;
   }
 }
