@@ -143,9 +143,6 @@ function ChatPage() {
   }, [])
 
   useEffect(() => {
-    console.log(newMessage)
-    console.log(activeChat)
-    console.log(activeChat?.chatId === newMessage?.chatId)
     if (newMessage != null) {
       if (activeChat != null && activeChat.chatId === newMessage.chatId) {
         getCurrentChat(activeChat.chatId)
