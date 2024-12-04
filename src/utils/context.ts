@@ -6,9 +6,9 @@ export interface UserState {
     setUser: (user: ChatUser) => void
 }
 
-const initialState: UserState = {
+const initUserState: UserState = {
     user: null,
     setUser: () => {}
 }
 
-export const UserContext = createContext<UserState>(initialState);
+export const UserContext = createContext<UserState>(initUserState);

@@ -2,12 +2,12 @@ import "../css/ChatPage.css";
 import { useContext, useEffect, useState } from 'react';
 import SockJS from "sockjs-client"
 import { CompatClient, Stomp } from '@stomp/stompjs';
-import { UserContext, UserState } from '../utils/context';
 import ChatService from '../api/ChatService';
 import { Message } from '../model/Message';
 import { Chat } from '../model/Chat';
 import { FoundUser } from "../model/FoundUser";
 import { Navbar } from "./Navbar";
+import { UserContext, UserState } from "../utils/context";
 
 // 1.
 // password: 1r;0F3Dw1EO[
@@ -23,7 +23,7 @@ import { Navbar } from "./Navbar";
 function ChatPage() {
   const { user } = useContext<UserState>(UserContext)
   const [client, setClient] = useState<CompatClient | null>(null);
-  const [activeChat, setActiveChat] = useState<Chat | null>(null);
+  const [activeChat, setActiveChat] = useState<Chat | null>(null)
   const [chats, setChats] = useState<Chat[]>([]);
   const [foundUsers, setFoundUsers] = useState<FoundUser[]>([]);
   const [isFinding, SetIsFinding] = useState<boolean>(false)
@@ -31,6 +31,7 @@ function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInputValue, setMessageInputValue] = useState("");
   const [notReadChats, setNotReadChats] = useState<Chat[]>([])
+  const [newMessage, setNewMessage] = useState<Message | null>(null)
 
   const findUsers = async (username: string) => {
     await ChatService.findUsers(username).then((users) => {
@@ -41,22 +42,15 @@ function ChatPage() {
 
   const getCurrentChat = async (chatId: string) => {
     await ChatService.getChat(chatId).then((currentChat) => {
-      setActiveChat(currentChat)
       setMessages(currentChat.messages)
+      setActiveChat(currentChat)
     })
-  }
-
-  const check = (m1: Message, m2: Message) => {
-    if (m1.fromId == m2.fromId && m1.content == m2.content && m1.timestamp == m2.timestamp) {
-      return true
-    }
   }
 
   const getNotReadChats = async (message: Message) => {
     await ChatService.getUserChats().then((chats) => {
       for (const chat of chats) {
-        if (chat.messages.filter((m: Message) => check(m, message)).length > 0) {
-          console.log("update notReadChats")
+        if (chat.chatId === message.chatId) {
           setNotReadChats([...notReadChats, chat])
         }
       }
@@ -69,16 +63,6 @@ function ChatPage() {
       setChats(chats)
     })
   }
-
-  const onMessageReceived = (payload: any) => {
-    const message = JSON.parse(payload.body) as Message;
-    console.log(activeChat)
-    setMessages([...messages, message])
-    
-    if (activeChat === null) {
-      getNotReadChats(message)
-    }
-  };
 
   const createMessage = () => {
     const message = messageInputValue;
@@ -109,36 +93,27 @@ function ChatPage() {
         },
         credentials: "include",
       },
-      JSON.stringify(message));
-    console.log(activeChat)
-    if (activeChat != null) {
-      setActiveChat(activeChat)
-      setMessages([...messages, message])
-    }
+      JSON.stringify(message)
+    );
+    setMessages([...messages, message])
   }
 
-  useEffect(() => {
-    if (!isFinding) {
-      getUserChats()
-    }
-  }, [isFinding])
-
-  useEffect(() => {
-    let sock = new SockJS(ChatService.API_URL + '/ws');
-    let stompClient = Stomp.over(sock);
-    stompClient.connect(
-      {},
-      () => { stompClient.subscribe(`/user/${user?.username}/queue/messages`, onMessageReceived) },
-      (error: any) => { console.log(error) }
-    )
-    setClient(stompClient)
-  }, [])
+  const onMessageReceived = (payload: any) => {
+    const message = JSON.parse(payload.body) as Message;
+    setNewMessage(message)
+  }
 
   const handleKeyPress = (event: any) => {
     if (event.key === "Escape") {
       setActiveChat(null)
+      setMessages([])
     }
   }
+
+  window.onbeforeunload = function (e) {
+    setActiveChat(null)
+    setMessages([])
+  };
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
@@ -148,9 +123,39 @@ function ChatPage() {
     };
   }, []);
 
-  window.onbeforeunload = function (e) {
-    setActiveChat(null)
-  };
+  useEffect(() => {
+    if (isFinding === false) {
+      getUserChats()
+    }
+  }, [isFinding])
+
+  useEffect(() => {
+    let sock = new SockJS(ChatService.API_URL + '/ws');
+    let stompClient = Stomp.over(sock);
+    stompClient.connect(
+      {},
+      () => {
+        stompClient.subscribe(`/user/${user?.username}/queue/messages`, onMessageReceived)
+      },
+      (error: any) => { console.log(error) }
+    )
+    setClient(stompClient)
+  }, [])
+
+  useEffect(() => {
+    console.log(newMessage)
+    console.log(activeChat)
+    console.log(activeChat?.chatId === newMessage?.chatId)
+    if (newMessage != null) {
+      if (activeChat != null && activeChat.chatId === newMessage.chatId) {
+        getCurrentChat(activeChat.chatId)
+      }
+      else {
+        getNotReadChats(newMessage)
+      }
+      setNewMessage(null)
+    }
+  }, [newMessage])
 
   return (
     <div className="flex flex-col h-screen w-screen bg-black">
@@ -225,9 +230,7 @@ function ChatPage() {
                 <li key={chat.chatId}>
                   <div
                     onClick={() => {
-                      setActiveChat(chat)
-                      setMessages(chat.messages)
-
+                      getCurrentChat(chat.chatId)
                       const index = notReadChats.indexOf(chat);
                       if (index > -1) {
                         notReadChats.splice(index, 1);
@@ -263,7 +266,7 @@ function ChatPage() {
           </ul>
         </div>
 
-        {activeChat != undefined
+        {activeChat
           ?
           <div className="flex-1 flex flex-col bg-black border-l-2">
             {/* Chat Header */}
