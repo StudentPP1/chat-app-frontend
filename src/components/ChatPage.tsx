@@ -8,6 +8,10 @@ import { Chat } from '../model/Chat';
 import { FoundUser } from "../model/FoundUser";
 import { Navbar } from "./Navbar";
 import { UserContext, UserState } from "../utils/context";
+import { MessageComponent } from "./Message";
+import { SendMessageRequest } from "../model/SendMessageRequest";
+import { UpdateMessageRequest } from "../model/UpdateMessageRequest";
+import { DeleteMessageRequest } from "../model/DeleteMessageRequest";
 
 // 1.
 // password: 1r;0F3Dw1EO[
@@ -16,9 +20,6 @@ import { UserContext, UserState } from "../utils/context";
 // 2.
 // password: 1r;0F3Dw1EO0
 // login: user
-
-// TODO: creating group
-// TODO: deleting chat
 
 function ChatPage() {
   const { user } = useContext<UserState>(UserContext)
@@ -44,6 +45,10 @@ function ChatPage() {
     await ChatService.getChat(chatId).then((currentChat) => {
       setMessages(currentChat.messages)
       setActiveChat(currentChat)
+      console.log("get chat: ")
+      console.dir(currentChat)
+      console.log("get messages: ")
+      console.dir(currentChat.messages)
     })
   }
 
@@ -81,9 +86,11 @@ function ChatPage() {
     }
   }
 
-  const messageSend = (message: Message) => {
+  const deleteMessage = (message: DeleteMessageRequest) => {
+    console.log("message send to delete: ")
+    console.dir(message)
     client?.send(
-      '/app/chat',
+      '/app/deleteMessage',
       {
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +102,42 @@ function ChatPage() {
       },
       JSON.stringify(message)
     );
-    setMessages([...messages, message])
+  }
+
+  const updateMessage = (message: UpdateMessageRequest) => {
+    console.log("message send to update: ")
+    console.dir(message)
+    client?.send(
+      '/app/updateMessage',
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+        credentials: "include",
+      },
+      JSON.stringify(message)
+    );
+  }
+
+  const messageSend = (message: SendMessageRequest) => {
+    console.log("message sending: ")
+    console.dir(message)
+    client?.send(
+      '/app/sendMessage',
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+        credentials: "include",
+      },
+      JSON.stringify(message)
+    );
   }
 
   const onMessageReceived = (payload: any) => {
@@ -143,15 +185,16 @@ function ChatPage() {
   }, [])
 
   useEffect(() => {
-    console.log(newMessage)
-    console.log(activeChat)
-    console.log(activeChat?.chatId === newMessage?.chatId)
     if (newMessage != null) {
+      console.log("get message: ")
+      console.dir(newMessage)
       if (activeChat != null && activeChat.chatId === newMessage.chatId) {
         getCurrentChat(activeChat.chatId)
       }
       else {
-        getNotReadChats(newMessage)
+        if (newMessage.type === "SENT") {
+          getNotReadChats(newMessage)
+        }
       }
       setNewMessage(null)
     }
@@ -288,22 +331,15 @@ function ChatPage() {
             <div className="flex flex-col h-full w-full mx-auto p-4 bg-black chat-box">
               {/* Chat Area */}
               <div className="flex-1 overflow-y-auto p-4 chat-area">
-                {messages.map((message) => (
-                  <div
-                    key={message.timestamp}
-                    className={`flex ${message.fromId === user?.username ? "justify-end" : "justify-start"
-                      }`}
-                  >
-                    <div
-                      key={message.timestamp}
-                      className={`mb-2 p-2 rounded-lg ${message.fromId === user?.username
-                        ? "bg-blue-500 text-white w-1/3"
-                        : "bg-gray-200 text-black w-1/3"
-                        }`}
-                    >
-                      {message.content}
-                    </div>
-                  </div>
+                {messages
+                .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+                .map((message) => (
+                  <MessageComponent
+                    message={message}
+                    user={user}
+                    updateMessage={updateMessage}
+                    deleteMessage={deleteMessage}
+                  />
                 ))}
               </div>
 
