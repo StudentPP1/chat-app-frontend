@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { Chat } from "../../model/Chat";
 import { ChatUser } from "../../model/ChatUser";
-import ChatService from "../../api/ChatService";
-import { AddUsersModal } from "../utils/AddUsersModal";
+import { ChatTitle } from "../utils/ChatTitle";
 
 export const ChatItem: React.FC<{
     user: ChatUser | null,
@@ -10,11 +8,13 @@ export const ChatItem: React.FC<{
     getCurrentChat: any,
     notReadChats: Chat[],
     activeChat: Chat | null,
-}> = ({ user, chat, getCurrentChat, notReadChats, activeChat }) => {
+    getUserChats: any
+}> = ({ user, chat, getCurrentChat, notReadChats, activeChat, getUserChats }) => {
     return (
         <>
             <div
                 onClick={() => {
+                    getUserChats()
                     getCurrentChat(chat.chatId)
                     const index = notReadChats.indexOf(chat);
                     if (index > -1) {
@@ -28,14 +28,7 @@ export const ChatItem: React.FC<{
                 </div>
 
                 <div className="ml-5 flex flex-col">
-                    <h2 className="block text-lg font-semibold text-white">
-                        {
-                            chat.type == "PERSONAL"
-                                ? chat.chatName.split("&").filter(name => name != `${user?.name}`)[0]
-                                : chat.chatName
-                        }
-                    </h2>
-
+                    <ChatTitle chat={chat} user={user}/>
                     {chat.messages.length > 0
                         ?
                         <div className="block text-sm text-gray-400">

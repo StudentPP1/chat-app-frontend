@@ -11,7 +11,7 @@ import { ChatComponent } from "./ChatComponent";
 import { ChatList } from "./ChatList";
 
 function ChatPage() {
-  const { user } = useContext<UserState>(UserContext)
+  const { user, setUser } = useContext<UserState>(UserContext)
   const [client, setClient] = useState<ClientService | null>(null);
   const [activeChat, setActiveChat] = useState<Chat | null>(null)
   const [chats, setChats] = useState<Chat[]>([]);
@@ -123,6 +123,7 @@ function ChatPage() {
       <div className="flex flex-1">
         <ChatList
           user={user}
+          setUser={setUser}
           activeChat={activeChat}
           setMessages={setMessages}
           setActiveChat={setActiveChat}

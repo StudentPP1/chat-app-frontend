@@ -4,6 +4,7 @@ import ChatService from "../../api/ChatService";
 import { ChatUser } from "../../model/ChatUser";
 import { Chat } from "../../model/Chat";
 import '../../css/ChatSidebar.css';
+import { ChatTitle } from "./ChatTitle";
 
 export const ChatSidebar: React.FC<{
     setChats: any,
@@ -12,7 +13,9 @@ export const ChatSidebar: React.FC<{
     setActiveChat: any
 }> = ({ setChats, user, chat, setActiveChat }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [content, setContent] = useState("");
 
     const deleteChat = async () => {
         setIsOpen(false)
@@ -26,6 +29,15 @@ export const ChatSidebar: React.FC<{
         await ChatService.addUsers(chat.chatId, users)
     };
 
+    const updateChatName = async () => {
+        if (content != "" && content != chat.chatName) {
+            await ChatService.updateChat(chat.chatId, content).then(() => {
+                setIsUpdate(false)
+                setContent("")
+            })
+        }
+    }
+
     return (
         <div>
             {/* Chat Header */}
@@ -34,15 +46,8 @@ export const ChatSidebar: React.FC<{
                 onClick={() => setIsOpen(!isOpen)}>
                 <div className="w-12 h-12 bg-white rounded-full">
                 </div>
-
-                <div className="ml-3">
-                    <h2 className="text-lg font-semibold text-white">
-                        {
-                            chat.type == "PERSONAL"
-                                ? chat.chatName.split("&").filter(name => name != `${user?.name}`)[0]
-                                : chat.chatName
-                        }
-                    </h2>
+                <div className="ml-5 flex flex-col">
+                    <ChatTitle chat={chat} user={user} />
                 </div>
             </div>
 
@@ -59,16 +64,28 @@ export const ChatSidebar: React.FC<{
                 <div className="flex items-center justify-left p-4 bg-black">
                     <div className="w-12 h-12 bg-white rounded-full">
                     </div>
-
-                    <div className="ml-5 flex flex-col">
-                        <h2 className="block text-lg font-semibold text-white">
-                            {
-                                chat.type == "PERSONAL"
-                                    ? chat.chatName.split("&").filter(name => name != `${user?.name}`)[0]
-                                    : chat.chatName
-                            }
-                        </h2>
-                    </div>
+                    {isUpdate
+                        ?
+                        <div className="ml-5">
+                            <div className="flex items-center">
+                                <input
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            updateChatName()
+                                        }
+                                    }}
+                                    className="text-lg font-semibold text-white w-5/6 bg-black"
+                                />
+                                <button className="w-1/6 close-button" onClick={() => setIsUpdate(false)}>x</button>
+                            </div>
+                        </div>
+                        :
+                        <div className="ml-5">
+                            <ChatTitle chat={chat} user={user} />
+                        </div>
+                    }
                 </div>
 
                 {chat.type === "GROUP"
@@ -118,15 +135,27 @@ export const ChatSidebar: React.FC<{
                         </li>
                         {chat.type === "GROUP" && chat.owner === user?.username
                             ?
-                            <li
-                                onClick={() => { setShowModal(true); }}
-                                className="py-2">
-                                <a
-                                    className="border ml-5 mr-5 text-sm text-gray-200 cursor-pointer hover:bg-gray-800 block px-4 py-2">
-                                    Add users
-                                </a>
-                            </li>
-
+                            <>
+                                <li
+                                    onClick={() => {
+                                        setContent(chat.chatName)
+                                        setIsUpdate(true)
+                                    }}
+                                    className="py-2">
+                                    <a
+                                        className="border ml-5 mr-5 text-sm text-gray-200 cursor-pointer hover:bg-gray-800 block px-4 py-2">
+                                        Change title
+                                    </a>
+                                </li>
+                                <li
+                                    onClick={() => { setShowModal(true); }}
+                                    className="py-2">
+                                    <a
+                                        className="border ml-5 mr-5 text-sm text-gray-200 cursor-pointer hover:bg-gray-800 block px-4 py-2">
+                                        Add users
+                                    </a>
+                                </li>
+                            </>
                             :
                             <></>
                         }

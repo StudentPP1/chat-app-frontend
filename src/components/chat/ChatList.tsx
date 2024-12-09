@@ -8,14 +8,15 @@ import { ChatItem } from "./ChatItem";
 
 
 export const ChatList: React.FC<{
-    user: ChatUser | null;
+    user: ChatUser | null,
+    setUser: any
     setMessages: any,
     setActiveChat: any,
     activeChat: Chat | null,
     notReadChats: Chat[],
     chats: Chat[],
     getUserChats: any
-}> = ({ user, setMessages, setActiveChat, activeChat, notReadChats, chats, getUserChats }) => {
+}> = ({ user, setUser, setMessages, setActiveChat, activeChat, notReadChats, chats, getUserChats }) => {
     const [foundUsers, setFoundUsers] = useState<FoundUser[]>([]);
     const [isFinding, SetIsFinding] = useState<boolean>(false)
     const [inputValue, setInputValue] = useState("");
@@ -52,7 +53,7 @@ export const ChatList: React.FC<{
         }
         if (!isFind) {
             await ChatService.createChat({
-                chatName: `${user?.name}&${foundUser.name}`,
+                chatName: "",
                 owner: undefined,
                 usernames: [`${user?.name}`, foundUser.username],
                 type: "PERSONAL"
@@ -87,7 +88,14 @@ export const ChatList: React.FC<{
         <div className="w-1/4 bg-black p-4">
             <div className="flex flex-row mb-4 mr-2">
                 <div className="flex flex-row bg-black shadow w-full">
-                    <Sidebar user={user} createChat={createChat} />
+                    <Sidebar 
+                    user={user} 
+                    setUser={setUser}
+                    createChat={createChat} 
+                    activeChat={activeChat}
+                    getCurrentChat={getCurrentChat}
+                    getUserChats={getUserChats}
+                    />
                     <div className="pl-5 flex items-center">
                         <input
                             placeholder="Search users"
@@ -137,6 +145,7 @@ export const ChatList: React.FC<{
                            getCurrentChat={getCurrentChat}
                            notReadChats={notReadChats}
                            activeChat={activeChat}
+                           getUserChats={getUserChats}
                            />
                         </li>
                     ))
