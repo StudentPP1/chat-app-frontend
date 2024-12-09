@@ -1,0 +1,16 @@
+.chat-sidebar {
+    right: -30%;
+    width: 30px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transition: width 0.1s ease;
+    display: block;
+}
+
+.chat-sidebar.open {
+    right: 0;
+    width: 25%;
+    display: block;
+    z-index: 100;
+}

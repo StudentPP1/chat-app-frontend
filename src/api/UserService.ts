@@ -53,4 +53,23 @@ export default class UserService {
     });
     return response;
   }
+
+  static async update(name: string, username: string) {
+    const response = await fetch(UserService.API_URL + "/update/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        newName: name,
+        newUsername: username,
+      }),
+    });
+    const json = await response.json();
+    return json;
+  }
 }

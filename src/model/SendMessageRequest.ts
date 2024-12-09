@@ -1,8 +1,6 @@
-export type Message = {
-    messageId: string,
+export type SendMessageRequest = {
     chatId: string,
     content: string,
     fromId: string,
-    type: string,
     timestamp: string,
 };

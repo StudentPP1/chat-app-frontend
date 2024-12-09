@@ -1,0 +1,55 @@
+.close {
+  width: 100%;
+  height: 30px;
+  display: flex;
+}
+
+.close-void.open {
+  cursor: default;
+  width: 90%;
+  height: 30px;
+  display: flex;
+  z-index: 100;
+}
+
+.close-button {
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  justify-content: center;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  margin: 10px;
+}
+
+.close-button:hover {
+  transform: scale(1.2);
+}
+
+.sidebar {
+  left: -30%;
+  width: 30px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  transition: width 0.1s ease;
+  display: block;
+}
+
+.sidebar.open {
+  left: 0;
+  width: 25%;
+  display: block;
+  z-index: 100;
+}
+
+.sidebar-item {
+  cursor: pointer;
+  font-size: 18px;
+  padding-top: 20px;
+  word-break: keep-all;
+  padding-left: 20px;
+}
