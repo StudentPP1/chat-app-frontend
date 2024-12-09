@@ -53,6 +53,7 @@ export const ChatList: React.FC<{
         if (!isFind) {
             await ChatService.createChat({
                 chatName: `${user?.name}&${foundUser.name}`,
+                owner: undefined,
                 usernames: [`${user?.name}`, foundUser.username],
                 type: "PERSONAL"
             }).then((createdChat) => {
@@ -67,6 +68,7 @@ export const ChatList: React.FC<{
         // send creating group
         await ChatService.createChat({
             chatName: name,
+            owner: `${user?.username}`,
             usernames: [...usernames, `${user?.username}`],
             type: "GROUP"
         }).then(() => {
@@ -135,8 +137,6 @@ export const ChatList: React.FC<{
                            getCurrentChat={getCurrentChat}
                            notReadChats={notReadChats}
                            activeChat={activeChat}
-                           getUserChats={getUserChats}
-                           setActiveChat={setActiveChat}
                            />
                         </li>
                     ))

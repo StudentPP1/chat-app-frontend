@@ -10,34 +10,10 @@ export const ChatItem: React.FC<{
     getCurrentChat: any,
     notReadChats: Chat[],
     activeChat: Chat | null,
-    getUserChats: any
-    setActiveChat: any
-}> = ({ user, chat, getCurrentChat, notReadChats, activeChat, getUserChats, setActiveChat }) => {
-    const [isClick, setIsClick] = useState<boolean>(false);
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    const handleClick = (e: any) => {
-        e.preventDefault()
-        if (e.button === 2) {
-            setIsClick(!isClick)
-        }
-    };
-
-    const deleteChat = async () => {
-        if (activeChat?.chatId === chat.chatId) {
-            setActiveChat(null)
-        }
-        await ChatService.deleteChat(`${user?.username}`, chat.chatId)
-    }
-
-    const handleSubmit = async (users: string[]) => {
-        await ChatService.addUsers(chat.chatId, users)
-    };
-
+}> = ({ user, chat, getCurrentChat, notReadChats, activeChat }) => {
     return (
         <>
             <div
-                onMouseDown={(e) => handleClick(e)}
                 onClick={() => {
                     getCurrentChat(chat.chatId)
                     const index = notReadChats.indexOf(chat);
@@ -79,38 +55,6 @@ export const ChatItem: React.FC<{
                     : <></>
                 }
             </div>
-
-            <div className={`relative bg-gray-800 divide-y divide-gray-100 rounded-lg shadow ${isClick ? "visible" : "hidden"}`}>
-                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                    <li>
-                        <a
-                            onClick={() => {
-                                setIsClick(false);
-                                deleteChat();
-                            }}
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                            Delete
-                        </a>
-                    </li>
-                    {chat.type === "GROUP"
-                        ?
-                        <li>
-                            <a
-                                onClick={() => { setIsClick(false); setIsOpen(true); }}
-                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                Add users
-                            </a>
-                        </li>
-                        :
-                        <></>
-                    }
-                </ul>
-            </div>
-            <AddUsersModal
-                isOpen={isOpen}
-                setOpen={setIsOpen}
-                onSubmit={handleSubmit}
-            />
         </>
     )
 }

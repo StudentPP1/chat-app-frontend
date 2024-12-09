@@ -20,10 +20,20 @@ function ChatPage() {
   const [newMessage, setNewMessage] = useState<any>(null)
 
   const getUserChats = async () => {
-    await ChatService.getUserChats().then((chats) => {
-      setChats(chats)
+    await ChatService.getUserChats().then((chats: Chat[]) => {
       console.log("get chats: ")
       console.dir(chats)
+
+      setChats(chats)
+
+      if (activeChat != null) {
+        setActiveChat(null)
+        for (const chat of chats) {
+          if (chat.chatId === activeChat.chatId) {
+            getCurrentChat(chat.chatId)
+          }
+        }
+      }
     })
   }
 
@@ -59,7 +69,6 @@ function ChatPage() {
     if (event.key === "Escape") {
       setActiveChat(null)
       setMessages([])
-      getUserChats()
     }
   }
 
@@ -94,19 +103,17 @@ function ChatPage() {
     if (newMessage != null) {
       console.log("get message: ")
       console.dir(newMessage)
-      if (newMessage.type === "SYSTEM") {
-        getUserChats()
+
+      getUserChats()
+
+      if (newMessage.type === "UPDATE" && activeChat != null) {
+        getCurrentChat(newMessage.chatId)
       }
-      else {
-        if (activeChat != null && activeChat.chatId === newMessage.chatId) {
-          getCurrentChat(activeChat.chatId)
-        }
-        else {
-          if (newMessage.type === "SENT") {
-            getNotReadChats(newMessage)
-          }
-        }
+
+      if (newMessage.type === "SENT" && activeChat === null) {
+        getNotReadChats(newMessage)
       }
+
       setNewMessage(null)
     }
   }, [newMessage])
@@ -127,10 +134,12 @@ function ChatPage() {
         {activeChat && client != null
           ?
           <ChatComponent
+            setChats={setChats}
             user={user}
             activeChat={activeChat}
             messages={messages}
             client={client}
+            setActiveChat={setActiveChat}
           />
           :
           <div className="w-1/4 bg-black p-4"></div>

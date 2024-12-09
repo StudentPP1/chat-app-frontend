@@ -5,6 +5,7 @@ export type Chat = {
     chatName: string,
     chatId: string,
     users: ChatUser[],
+    owner: string,
     type: string
     messages: Message[]
 };

@@ -2,21 +2,27 @@ import { useState } from "react";
 import { Modal } from "./Modal";
 import ChatService from "../../api/ChatService";
 import { FoundUser } from "../../model/FoundUser";
+import { Chat } from "../../model/Chat";
 
 export const AddUsersModal: React.FC<{
     isOpen: any,
     setOpen: any,
-    onSubmit: any
-}> = ({ isOpen, setOpen, onSubmit }) => {
+    onSubmit: any,
+    chat: Chat
+}> = ({ isOpen, setOpen, onSubmit, chat}) => {
     const [groupUsers, setGroupUsers] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [foundUsers, setFoundUsers] = useState<FoundUser[]>([]);
 
     const handleSubmit = (e: any) => {
-        e.preventDefault();
-        setFoundUsers([])
-        setGroupUsers([])
-        setInputValue("")
+        if (groupUsers.length > 0) {
+            e.preventDefault();
+            onSubmit(groupUsers)
+            setFoundUsers([])
+            setGroupUsers([])
+            setInputValue("")
+            setOpen(false)
+        }
     };
 
     const findUsers = async (username: string) => {
@@ -57,7 +63,10 @@ export const AddUsersModal: React.FC<{
                                 <li>
                                     <div
                                         onClick={() => {
-                                            if (groupUsers.indexOf(user.username) == -1) {
+                                            if (
+                                                groupUsers.indexOf(user.username) == -1 
+                                                && chat.users.map(u => u.username).indexOf(user.username) == -1 
+                                            ) {
                                                 setGroupUsers([...groupUsers, user.username])
                                             }
                                             setFoundUsers([])
@@ -90,9 +99,8 @@ export const AddUsersModal: React.FC<{
             <button
                 type="submit"
                 className="px-4 py-2 bg-gray-800 hover:bg-gray-600 text-white rounded-lg"
-                onClick={() => {
-                    onSubmit(groupUsers)
-                    setOpen(false)
+                onClick={(e) => {
+                    handleSubmit(e)
                 }}
             >
                 Submit

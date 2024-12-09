@@ -4,13 +4,16 @@ import { Chat } from "../../model/Chat";
 import { Message } from "../../model/Message";
 import ClientService from "../../api/ClientService";
 import { MessageComponent } from "./MessageComponent";
+import { ChatSidebar } from "../utils/ChatSidebar";
 
 export const ChatComponent: React.FC<{
+    setChats: any,
     user: ChatUser | null,
     activeChat: Chat,
     messages: Message[],
-    client: ClientService
-}> = ({ user, activeChat, messages, client }) => {
+    client: ClientService,
+    setActiveChat: any
+}> = ({ setChats, user, activeChat, messages, client, setActiveChat }) => {
     const [messageInputValue, setMessageInputValue] = useState("");
 
     const createMessage = () => {
@@ -27,20 +30,12 @@ export const ChatComponent: React.FC<{
     return (
         <div className="flex-1 bg-black border-l-2">
             {/* Chat Header */}
-            <div className="flex items-center p-4 bg-black shadow">
-                <div className="w-12 h-12 bg-white rounded-full">
-                </div>
-
-                <div className="ml-3">
-                    <h2 className="text-lg font-semibold text-white">
-                        {
-                            activeChat.type == "PERSONAL"
-                                ? activeChat.chatName.split("&").filter(name => name != `${user?.name}`)[0]
-                                : activeChat.chatName
-                        }
-                    </h2>
-                </div>
-            </div>
+            <ChatSidebar
+                setChats={setChats}
+                user={user}
+                chat={activeChat}
+                setActiveChat={setActiveChat}
+            />
 
             <div className="flex flex-col h-full w-full mx-auto p-4 bg-black chat-box">
                 {/* Chat Area */}
