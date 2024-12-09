@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Message } from "../model/Message"
-import { ChatUser } from "../model/ChatUser";
+import { Message } from "../../model/Message";
+import { ChatUser } from "../../model/ChatUser";
+import ClientService from "../../api/ClientService";
 
 export const MessageComponent: React.FC<{
     message: Message,
     user: ChatUser | null,
-    updateMessage: any,
-    deleteMessage: any
-}> = ({ message, user, updateMessage, deleteMessage }) => {
+    client: ClientService
+}> = ({ message, user, client }) => {
     const [isClick, setIsClick] = useState<boolean>(false);
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     const [content, setContent] = useState<string>("");
@@ -22,6 +22,7 @@ export const MessageComponent: React.FC<{
             type: "UPDATE"
         }
     }
+    
     const createDeleteMessageRequest = () => {
         return {
             messageId: message.messageId,
@@ -30,9 +31,10 @@ export const MessageComponent: React.FC<{
             type: "DELETE"
         }
     }
+
     const handleClick = (e: any) => {
         console.log(e.button)
-        if (e.button === 0 && message.fromId === user?.username) {
+        if (e.button === 2 && message.fromId === user?.username) {
             setIsClick(!isClick)
         }
     };
@@ -60,7 +62,7 @@ export const MessageComponent: React.FC<{
                                 if (e.key === "Enter") {
                                     setIsClick(false)
                                     setIsUpdate(false)
-                                    updateMessage(createUpdateMessageRequest())
+                                    client.updateMessage(createUpdateMessageRequest())
                                     setContent("");
                                     setNewContent("");
                                 }
@@ -110,7 +112,10 @@ export const MessageComponent: React.FC<{
                             </li>
                             <li>
                                 <a
-                                    onClick={() => {setIsClick(false); deleteMessage(createDeleteMessageRequest())}}
+                                    onClick={() => {
+                                        setIsClick(false); 
+                                        client.deleteMessage(createDeleteMessageRequest())
+                                    }}
                                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     Delete
                                 </a>

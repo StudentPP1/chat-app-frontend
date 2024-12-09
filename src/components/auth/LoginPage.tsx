@@ -1,7 +1,7 @@
-import "../css/LoginPage.css"
+import "../../css/LoginPage.css"
 import { useContext, useState } from 'react';
-import UserService from "../api/UserService";
-import { UserContext, UserState } from "../utils/context";
+import UserService from "../../api/UserService";
+import { UserContext, UserState } from "../../utils/context";
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState<boolean>(false);

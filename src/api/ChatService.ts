@@ -72,4 +72,44 @@ export default class ChatService {
     const json = await response.json();
     return json;
   }
+
+  static async deleteChat(fromId: string, chatId: string) {
+    await fetch(
+      ChatService.API_URL + "/delete/chat/",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          chatId: parseInt(chatId),
+          fromId: fromId
+        })
+      }
+    );
+  }
+
+  static async addUsers(chatId: string, usernames: string[]) {
+    await fetch(
+      ChatService.API_URL + "/add/users/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          chatId: parseInt(chatId),
+          usernames: usernames
+        })
+      }
+    );
+  }
 }

@@ -1,10 +1,18 @@
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router";
-import LoginPage from "./components/LoginPage";
-import ChatPage from "./components/ChatPage";
+import LoginPage from "./components/auth/LoginPage";
+import ChatPage from "./components/chat/ChatPage";
 import { UserContext } from "./utils/context";
 import { useEffect, useState } from "react";
 import { ChatUser } from "./model/ChatUser";
 import UserService from "./api/UserService";
+
+// 1.
+// password: 1r;0F3Dw1EO[
+// login: test
+
+// 2.
+// password: 1r;0F3Dw1EO0
+// login: user
 
 function App() {
   const [user, setUser] = useState<ChatUser | null>(null);
@@ -21,7 +29,7 @@ function App() {
       console.log(error)
       setUser(null)
     }
-  }, [])
+  }, []);
 
   return (
     <div className="app">
