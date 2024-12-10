@@ -1,5 +1,6 @@
 import { Chat } from "../../model/Chat";
 import { ChatUser } from "../../model/ChatUser";
+import { ChatImg } from "../utils/ChatImg";
 import { ChatTitle } from "../utils/ChatTitle";
 
 export const ChatItem: React.FC<{
@@ -24,11 +25,10 @@ export const ChatItem: React.FC<{
                 style={{ backgroundColor: `${chat.chatId === activeChat?.chatId ? "rgb(107 114 128)" : "transparent"}` }}
                 className="flex items-center p-4 bg-black shadow chat flex-row"
             >
-                <div className="w-12 h-12 bg-white rounded-full">
-                </div>
+                <ChatImg chat={chat}/>
 
                 <div className="ml-5 flex flex-col">
-                    <ChatTitle chat={chat} user={user}/>
+                    <ChatTitle chat={chat} user={user} />
                     {chat.messages.length > 0
                         ?
                         <div className="block text-sm text-gray-400">

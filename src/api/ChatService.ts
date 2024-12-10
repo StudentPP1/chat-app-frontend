@@ -117,4 +117,20 @@ export default class ChatService {
       }),
     });
   }
+
+  static async updateChatImg(chatId: string, file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    await fetch(ChatService.API_URL + "/update/chat/" + chatId, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*",
+      },
+      credentials: "include",
+      body: formData
+    });
+  }
 }
