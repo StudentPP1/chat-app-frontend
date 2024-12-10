@@ -65,7 +65,6 @@ export const ChatComponent: React.FC<{
                         }}
                     />
                 </div>
-
             </div>
         </div>
     )

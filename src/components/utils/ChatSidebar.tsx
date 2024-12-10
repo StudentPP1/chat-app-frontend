@@ -5,6 +5,7 @@ import { ChatUser } from "../../model/ChatUser";
 import { Chat } from "../../model/Chat";
 import '../../css/ChatSidebar.css';
 import { ChatTitle } from "./ChatTitle";
+import { ChatImg } from "./ChatImg";
 
 export const ChatSidebar: React.FC<{
     setChats: any,
@@ -38,14 +39,22 @@ export const ChatSidebar: React.FC<{
         }
     }
 
+    const updateChatImg = async (event: any) => {
+        event.preventDefault()
+        await ChatService.updateChatImg(chat.chatId, event.target.files[0]).then(() => {
+            setIsUpdate(false)
+            setContent("")
+        })
+    }
+
+
     return (
         <div>
             {/* Chat Header */}
             <div
                 className="flex items-center p-4 bg-black shadow cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}>
-                <div className="w-12 h-12 bg-white rounded-full">
-                </div>
+                <ChatImg chat={chat} />
                 <div className="ml-5 flex flex-col">
                     <ChatTitle chat={chat} user={user} />
                 </div>
@@ -62,29 +71,39 @@ export const ChatSidebar: React.FC<{
                 </div>
 
                 <div className="flex items-center justify-left p-4 bg-black">
-                    <div className="w-12 h-12 bg-white rounded-full">
-                    </div>
                     {isUpdate
                         ?
-                        <div className="ml-5">
-                            <div className="flex items-center">
-                                <input
-                                    value={content}
-                                    onChange={(e) => setContent(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") {
-                                            updateChatName()
-                                        }
-                                    }}
-                                    className="text-lg font-semibold text-white w-5/6 bg-black"
-                                />
-                                <button className="w-1/6 close-button" onClick={() => setIsUpdate(false)}>x</button>
+                        <>
+                            <div className='flex justify-center'>
+                                <label htmlFor="file-upload" className="w-12 h-12 bg-white text-white rounded-full custom-file-upload">
+                                </label>
+                                <input id="file-upload" type="file" onChange={(event: any) => {
+                                    updateChatImg(event);
+                                }} />
                             </div>
-                        </div>
+                            <div className="ml-5">
+                                <div className="flex items-center">
+                                    <input
+                                        value={content}
+                                        onChange={(e) => setContent(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                updateChatName()
+                                            }
+                                        }}
+                                        className="text-lg font-semibold text-white w-5/6 bg-black"
+                                    />
+                                    <button className="w-1/6 close-button" onClick={() => setIsUpdate(false)}>x</button>
+                                </div>
+                            </div>
+                        </>
                         :
-                        <div className="ml-5">
-                            <ChatTitle chat={chat} user={user} />
-                        </div>
+                        <>
+                            <ChatImg chat={chat} />
+                            <div className="ml-5">
+                                <ChatTitle chat={chat} user={user} />
+                            </div>
+                        </>
                     }
                 </div>
 
@@ -144,7 +163,7 @@ export const ChatSidebar: React.FC<{
                                     className="py-2">
                                     <a
                                         className="border ml-5 mr-5 text-sm text-gray-200 cursor-pointer hover:bg-gray-800 block px-4 py-2">
-                                        Change title
+                                        Change details
                                     </a>
                                 </li>
                                 <li
