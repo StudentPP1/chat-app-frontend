@@ -1,7 +1,7 @@
 import { ChatCreateRequest } from "../model/ChatCreateRequest";
 
 export default class ChatService {
-  static API_URL = "https://chat-app-backend-87qk.onrender.com";
+  static API_URL = process.env.REACT_APP_BACKEND_URL;
 
   static async getUserChats() {
     const response = await fetch(ChatService.API_URL + "/get/user/chats", {

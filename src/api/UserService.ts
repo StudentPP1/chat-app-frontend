@@ -1,12 +1,12 @@
 export default class UserService {
-  static API_URL = "https://chat-app-backend-87qk.onrender.com";
+  static API_URL = process.env.REACT_APP_BACKEND_URL;
 
   static async getSession() {
     const result = await fetch(UserService.API_URL + "/auth/getSession", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
         "Access-Control-Allow-Headers": "*",
       },
@@ -40,7 +40,7 @@ export default class UserService {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
         "Access-Control-Allow-Headers": "*",
       },
@@ -59,7 +59,7 @@ export default class UserService {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
         "Access-Control-Allow-Headers": "*",
       },
@@ -80,7 +80,7 @@ export default class UserService {
     const response = await fetch(UserService.API_URL + "/update/user/img", {
       method: "PATCH",
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
         "Access-Control-Allow-Headers": "*",
       },
