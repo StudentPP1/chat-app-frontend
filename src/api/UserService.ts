@@ -1,5 +1,5 @@
 export default class UserService {
-  static API_URL = process.env.REACT_APP_BACKEND_URL;
+  static API_URL = "https://chat-app-backend-87qk.onrender.com";
 
   static async getSession() {
     const result = await fetch(UserService.API_URL + "/auth/getSession", {
