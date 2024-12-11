@@ -54,7 +54,7 @@ export const ChatSidebar: React.FC<{
             <div
                 className="flex items-center p-4 bg-black shadow cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}>
-                <ChatImg chat={chat} />
+                <ChatImg chat={chat} user={user} />
                 <div className="ml-5 flex flex-col">
                     <ChatTitle chat={chat} user={user} />
                 </div>
@@ -99,7 +99,7 @@ export const ChatSidebar: React.FC<{
                         </>
                         :
                         <>
-                            <ChatImg chat={chat} />
+                            <ChatImg chat={chat} user={user} />
                             <div className="ml-5">
                                 <ChatTitle chat={chat} user={user} />
                             </div>

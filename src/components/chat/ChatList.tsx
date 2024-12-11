@@ -55,7 +55,7 @@ export const ChatList: React.FC<{
             await ChatService.createChat({
                 chatName: "",
                 owner: undefined,
-                usernames: [`${user?.name}`, foundUser.username],
+                usernames: [`${user?.username}`, foundUser.username],
                 type: "PERSONAL"
             }).then((createdChat) => {
                 getCurrentChat(createdChat.chatId)

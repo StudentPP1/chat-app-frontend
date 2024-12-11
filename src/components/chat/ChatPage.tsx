@@ -27,7 +27,6 @@ function ChatPage() {
       setChats(chats)
 
       if (activeChat != null) {
-        setActiveChat(null)
         for (const chat of chats) {
           if (chat.chatId === activeChat.chatId) {
             getCurrentChat(chat.chatId)
@@ -75,6 +74,7 @@ function ChatPage() {
   window.onbeforeunload = function (e) {
     setActiveChat(null)
     setMessages([])
+    getUserChats()
   };
   window.addEventListener(`contextmenu`, (e) => e.preventDefault());
 
