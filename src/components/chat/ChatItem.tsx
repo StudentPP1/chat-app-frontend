@@ -15,17 +15,17 @@ export const ChatItem: React.FC<{
         <>
             <div
                 onClick={() => {
-                    getUserChats()
-                    getCurrentChat(chat.chatId)
-                    const index = notReadChats.indexOf(chat);
-                    if (index > -1) {
-                        notReadChats.splice(index, 1);
-                    }
+                    getCurrentChat(chat.chatId).then(() => {
+                        const index = notReadChats.indexOf(chat);
+                        if (index > -1) {
+                            notReadChats.splice(index, 1);
+                        }
+                    })
                 }}
                 style={{ backgroundColor: `${chat.chatId === activeChat?.chatId ? "rgb(107 114 128)" : "transparent"}` }}
                 className="flex items-center p-4 bg-black shadow chat flex-row"
             >
-                <ChatImg chat={chat}/>
+                <ChatImg chat={chat} user={user} />
 
                 <div className="ml-5 flex flex-col">
                     <ChatTitle chat={chat} user={user} />

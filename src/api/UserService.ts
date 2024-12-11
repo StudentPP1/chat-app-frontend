@@ -85,9 +85,27 @@ export default class UserService {
         "Access-Control-Allow-Headers": "*",
       },
       credentials: "include",
-      body: formData
+      body: formData,
     });
 
+    const json = await response.json();
+    return json;
+  }
+
+  static async getUser(username: string) {
+    const response = await fetch(
+      UserService.API_URL + "/get/user/" + username,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*",
+        },
+        credentials: "include",
+      }
+    );
     const json = await response.json();
     return json;
   }
