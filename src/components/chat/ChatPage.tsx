@@ -133,9 +133,10 @@ function ChatPage() {
           getUserChats={getUserChats}
         />
 
-        {activeChat && client != null
+        {activeChat && client != null   
           ?
           <ChatComponent
+            chats={chats}
             setChats={setChats}
             user={user}
             activeChat={activeChat}
