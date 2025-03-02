@@ -7,13 +7,14 @@ import { MessageComponent } from "./MessageComponent";
 import { ChatSidebar } from "../utils/ChatSidebar";
 
 export const ChatComponent: React.FC<{
+    chats: Chat[],
     setChats: any,
     user: ChatUser | null,
     activeChat: Chat,
     messages: Message[],
     client: ClientService,
     setActiveChat: any
-}> = ({ setChats, user, activeChat, messages, client, setActiveChat }) => {
+}> = ({ chats, setChats, user, activeChat, messages, client, setActiveChat }) => {
     const [messageInputValue, setMessageInputValue] = useState("");
 
     const createMessage = () => {
@@ -28,6 +29,7 @@ export const ChatComponent: React.FC<{
     }
 
     return (
+        chats.map(chat => chat.chatId).includes(activeChat.chatId) && 
         <div className="flex-1 bg-black border-l-2">
             {/* Chat Header */}
             <ChatSidebar
