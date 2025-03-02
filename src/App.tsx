@@ -5,6 +5,7 @@ import { UserContext } from "./utils/context";
 import { useEffect, useState } from "react";
 import { ChatUser } from "./model/ChatUser";
 import UserService from "./api/UserService";
+import { ToastContainer } from "react-toastify";
 
 // 1.
 // password: 1r;0F3Dw1EO[
@@ -33,11 +34,12 @@ function App() {
 
   return (
     <div className="app">
-      <UserContext.Provider value={{user, setUser}}>
+      <ToastContainer theme="dark" style={{ zIndex: 1000 }} />
+      <UserContext.Provider value={{ user, setUser }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={user ? <ChatPage /> : <LoginPage />} />
-            <Route path="/login" element={user ? <Navigate to="/" replace />  : <LoginPage />} />
+            <Route path="/login" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
             <Route path="/chat" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
           </Routes>
         </BrowserRouter>

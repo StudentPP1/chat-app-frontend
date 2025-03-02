@@ -2,11 +2,11 @@ import "../../css/LoginPage.css"
 import { useContext, useState } from 'react';
 import UserService from "../../api/UserService";
 import { UserContext, UserState } from "../../utils/context";
+import { toast } from "react-toastify";
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null)
   const { setUser } = useContext<UserState>(UserContext)
 
   const login = async (event: any) => {
@@ -17,7 +17,8 @@ function LoginPage() {
     await UserService.login(username, password).then(async res => {
       if (!res.ok) {
         return res.text().then(text => {
-          setError(text)
+          const errorMessage = text.split(":")[1].split(",")[0];
+          toast.error(errorMessage, { position: "top-right" });
         })
       }
       else {
@@ -35,18 +36,14 @@ function LoginPage() {
     await UserService.register(name, username, password).then(async res => {
       if (!res.ok) {
         res.text().then(text => {
-          setError(text)
+          const errorMessage = text.split(":")[1].split(",")[0];
+          toast.error(errorMessage, { position: "top-right" });
         })
       }
       else {
         setUser(await UserService.getSession())
       }
     })
-  }
-
-  if (error) {
-    window.alert(error)
-    setError(null)
   }
 
   return (
