@@ -1,136 +1,103 @@
 import { ChatCreateRequest } from "../model/ChatCreateRequest";
+import { API_URL, RequestAttributes } from "../utils/constants";
 
 export default class ChatService {
-  static API_URL = process.env.REACT_APP_BACKEND_URL;
-
   static async getUserChats() {
-    const response = await fetch(ChatService.API_URL + "/get/user/chats", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      API_URL + "/get/user/chats",
+      await RequestAttributes.builder().build()
+    );
     const json = await response.json();
     return json;
   }
 
   static async findUsers(username: string) {
     const response = await fetch(
-      ChatService.API_URL + "/get/user/" + username,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "*",
-          "Access-Control-Allow-Headers": "*",
-        },
-        credentials: "include",
-      }
+      API_URL + "/get/user/" + username,
+      await RequestAttributes.builder().build()
     );
     const json = await response.json();
     return json;
   }
 
   static async getChat(chatId: string) {
-    const response = await fetch(ChatService.API_URL + "/get/chat/" + chatId, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      API_URL + "/get/chat/" + chatId,
+      await RequestAttributes.builder().build()
+    );
     const json = await response.json();
     return json;
   }
 
   static async createChat(chat: ChatCreateRequest) {
-    const response = await fetch(ChatService.API_URL + "/create/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify(chat),
-    });
+    const response = await fetch(
+      API_URL + "/create/chat",
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .setBody(JSON.stringify(chat))
+        .build()
+    );
     const json = await response.json();
     return json;
   }
 
   static async deleteChat(fromId: string, chatId: string) {
-    await fetch(ChatService.API_URL + "/delete/chat/", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        chatId: parseInt(chatId),
-        fromId: fromId,
-      }),
-    });
+    await fetch(
+      API_URL + "/delete/chat/",
+      await RequestAttributes.builder()
+        .setMethod("DELETE")
+        .setBody(
+          JSON.stringify({
+            chatId: parseInt(chatId),
+            fromId: fromId,
+          })
+        )
+        .build()
+    );
   }
 
   static async addUsers(chatId: string, usernames: string[]) {
-    await fetch(ChatService.API_URL + "/add/users/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        chatId: parseInt(chatId),
-        usernames: usernames,
-      }),
-    });
+    await fetch(
+      API_URL + "/add/users/",
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .setBody(
+          JSON.stringify({
+            chatId: parseInt(chatId),
+            usernames: usernames,
+          })
+        )
+        .build()
+    );
   }
 
   static async updateChat(chatId: string, chatName: string) {
-    await fetch(ChatService.API_URL + "/update/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        chatId: parseInt(chatId),
-        chatName: chatName,
-      }),
-    });
+    await fetch(
+      API_URL + "/update/chat",
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .setBody(
+          JSON.stringify({
+            chatId: parseInt(chatId),
+            chatName: chatName,
+          })
+        )
+        .build()
+    );
   }
 
   static async updateChatImg(chatId: string, file: File) {
     const formData = new FormData();
     formData.append("file", file);
-  
-    await fetch(ChatService.API_URL + "/update/chat/" + chatId, {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: formData
-    });
+
+    await fetch(
+      API_URL + "/update/chat/" + chatId,
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .defaultHeader()
+        .addHeader("Access-Control-Allow-Origin", "*")
+        .setBody(formData)
+        .build()
+    );
   }
 }

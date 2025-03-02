@@ -9,6 +9,7 @@ import { UserContext, UserState } from "../../utils/context";
 import ClientService from "../../api/ClientService";
 import { ChatComponent } from "./ChatComponent";
 import { ChatList } from "./ChatList";
+import { API_URL } from "../../utils/constants";
 
 function ChatPage() {
   const { user, setUser } = useContext<UserState>(UserContext)
@@ -87,7 +88,7 @@ function ChatPage() {
   }, []);
 
   useEffect(() => {
-    let sock = new SockJS(ChatService.API_URL + '/ws');
+    let sock = new SockJS(API_URL + '/ws');
     let stompClient = Stomp.over(sock);
     stompClient.connect(
       {},

@@ -1,17 +1,11 @@
-export default class UserService {
-  static API_URL = process.env.REACT_APP_BACKEND_URL;
+import { API_URL, RequestAttributes } from "../utils/constants";
 
+export default class UserService {
   static async getSession() {
-    const result = await fetch(UserService.API_URL + "/auth/getSession", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-    });
+    const result = await fetch(
+      API_URL + "/auth/getSession",
+      await RequestAttributes.builder().build()
+    );
     if (result.ok) {
       const json = await result.json();
       return json;
@@ -21,54 +15,47 @@ export default class UserService {
   }
 
   static async login(username: string, password: string) {
-    const response = await fetch(UserService.API_URL + "/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({ username: username, password: password }),
-    });
+    const response = await fetch(
+      API_URL + "/auth/login",
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .setBody(JSON.stringify({ username: username, password: password }))
+        .build()
+    );
     return response;
   }
 
   static async register(name: string, username: string, password: string) {
-    const response = await fetch(UserService.API_URL + "/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        name: name,
-        username: username,
-        password: password,
-      }),
-    });
+    const response = await fetch(
+      API_URL + "/auth/register",
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .setBody(
+          JSON.stringify({
+            name: name,
+            username: username,
+            password: password,
+          })
+        )
+        .build()
+    );
+
     return response;
   }
 
   static async update(name: string, username: string) {
-    const response = await fetch(UserService.API_URL + "/update/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        newName: name,
-        newUsername: username,
-      }),
-    });
+    const response = await fetch(
+      API_URL + "/update/user",
+      await RequestAttributes.builder()
+        .setMethod("POST")
+        .setBody(
+          JSON.stringify({
+            newName: name,
+            newUsername: username,
+          })
+        )
+        .build()
+    );
     const json = await response.json();
     return json;
   }
@@ -77,34 +64,23 @@ export default class UserService {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(UserService.API_URL + "/update/user/img", {
-      method: "PATCH",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-      },
-      credentials: "include",
-      body: formData,
-    });
-
+    const response = await fetch(
+      API_URL + "/update/user/img",
+      await RequestAttributes.builder()
+        .setMethod("PATCH")
+        .defaultHeader()
+        .addHeader("Access-Control-Allow-Origin", "*")
+        .setBody(formData)
+        .build()
+    );
     const json = await response.json();
     return json;
   }
 
   static async getUser(username: string) {
     const response = await fetch(
-      UserService.API_URL + "/get/user/" + username,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "*",
-          "Access-Control-Allow-Headers": "*",
-        },
-        credentials: "include",
-      }
+      API_URL + "/get/user/" + username,
+      await RequestAttributes.builder().build()
     );
     const json = await response.json();
     return json;
